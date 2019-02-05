@@ -18,12 +18,13 @@ public class RobotMap {
   //TODO: get correct port numbers
   public static final int victor1 = 0;
   public static final int victor2 = 1;
+  public static final int victor3 = 2;
 
   public static final int joystick = 1;
 
   public static final String cameraIPAddress = "10.42.15.36";
 
-  //pneumaticsaaaaaaa
+  //pneumatics
   public static final int solenoidForwardChannel = 1;
   public static final int solenoidReverseChannel = 0;
   // For example to map the left and right motors, you could define the

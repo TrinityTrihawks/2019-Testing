@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
 
   VictorSP victor1;
   VictorSP victor2;
+  VictorSP victor3;
   DoubleSolenoid suction;
 
   Joystick joystick;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
 
     victor1 = new VictorSP(RobotMap.victor1);
     victor2 = new VictorSP(RobotMap.victor2);
+    victor3 = new VictorSP(RobotMap.victor3);
 
     joystick = new Joystick(RobotMap.joystick);
 
@@ -112,21 +114,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    double victor1Power = joystick.getRawAxis(1);
-    double victor2Power = joystick.getRawAxis(3);
+    double joyVal1 = joystick.getRawAxis(1);
+    double joyVal2 = joystick.getRawAxis(3);
 
-    if(Math.abs(victor1Power) < 0.15) {
-      victor1Power = 0;
+    if(Math.abs(joyVal1) < 0.15) {
+      joyVal1 = 0;
+    }
+    if(Math.abs(joyVal2) < 0.15) {
+      joyVal2 = 0;
     }
 
-    
-    if(Math.abs(victor2Power) < 0.15) {
-      victor2Power = 0;
-    }
-
-  
-    victor1.set(victor1Power);
-    victor2.set(victor2Power);
+    // victor1.set(victor1Power);
+    // victor2.set(victor2Power);
+    victor1.set(joyVal1);
+    victor2.set(joyVal1);
+    victor3.set(joyVal1);
 
     if(joystick.getRawButton(3)) {
       suction.set(DoubleSolenoid.Value.kForward);
