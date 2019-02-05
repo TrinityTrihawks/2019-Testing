@@ -16,10 +16,16 @@ package frc.robot;
 public class RobotMap {
 
   //TODO: get correct port numbers
-  public static final int victor1 = 1;
-  public static final int victor2 = 2;
+  public static final int victor1 = 0;
+  public static final int victor2 = 1;
 
   public static final int joystick = 1;
+
+  public static final String cameraIPAddress = "10.42.15.36";
+
+  //pneumaticsaaaaaaa
+  public static final int solenoidForwardChannel = 1;
+  public static final int solenoidReverseChannel = 0;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;

@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.cscore.AxisCamera;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
-
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
+  
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -21,8 +23,11 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
  */
 public class Robot extends TimedRobot {
 
-  VictorSPX victor1;
-  VictorSPX victor2;
+  AxisCamera camera;
+
+  VictorSP victor1;
+  VictorSP victor2;
+  DoubleSolenoid suction;
 
   Joystick joystick;
 
@@ -33,10 +38,16 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    victor1 = new VictorSPX(RobotMap.victor1);
-    victor2 = new VictorSPX(RobotMap.victor2);
+    camera = CameraServer.getInstance().addAxisCamera("TestBoard Camera", RobotMap.cameraIPAddress);
+    // CameraServer.getInstance().startAutomaticCapture(camera);
+
+    victor1 = new VictorSP(RobotMap.victor1);
+    victor2 = new VictorSP(RobotMap.victor2);
 
     joystick = new Joystick(RobotMap.joystick);
+
+    suction = new DoubleSolenoid(RobotMap.solenoidForwardChannel, RobotMap.solenoidReverseChannel);
+
   }
 
   /**
@@ -65,6 +76,9 @@ public class Robot extends TimedRobot {
 
   }
 
+
+
+
   /**
    * This autonomous (along with the chooser code above) shows how to select
    * between different autonomous modes using the dashboard. The sendable
@@ -91,7 +105,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
-
   }
 
   /**
@@ -99,6 +112,34 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    double victor1Power = joystick.getRawAxis(1);
+    double victor2Power = joystick.getRawAxis(3);
+
+    if(Math.abs(victor1Power) < 0.15) {
+      victor1Power = 0;
+    }
+
+    
+    if(Math.abs(victor2Power) < 0.15) {
+      victor2Power = 0;
+    }
+
+  
+    victor1.set(victor1Power);
+    victor2.set(victor2Power);
+
+    if(joystick.getRawButton(3)) {
+      suction.set(DoubleSolenoid.Value.kForward);
+      System.out.println("Pneumatics forward");
+
+    } else if(joystick.getRawButton(1)) {
+      suction.set(DoubleSolenoid.Value.kReverse);
+      System.out.println("Pneumatics reverse");
+
+    } else if(joystick.getRawButton(2)) {
+      suction.set(DoubleSolenoid.Value.kOff);
+      System.out.println("Pneumatics off");
+    }
   }
 
   /**
