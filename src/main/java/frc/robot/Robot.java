@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.cscore.AxisCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
   
@@ -29,6 +30,8 @@ public class Robot extends TimedRobot {
   VictorSP victor2;
   VictorSP victor3;
   DoubleSolenoid suction;
+
+  Compressor compressor;
 
   Joystick joystick;
 
@@ -49,6 +52,9 @@ public class Robot extends TimedRobot {
     joystick = new Joystick(RobotMap.joystick);
 
     suction = new DoubleSolenoid(RobotMap.solenoidForwardChannel, RobotMap.solenoidReverseChannel);
+
+    compressor = new Compressor();
+    // compressor.clearAllPCMStickyFaults();
 
   }
 
@@ -75,7 +81,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-
+    System.out.println("Compressor enabled: "+ compressor.enabled());
   }
 
 
@@ -126,19 +132,36 @@ public class Robot extends TimedRobot {
 
     // victor1.set(victor1Power);
     // victor2.set(victor2Power);
-    victor1.set(joyVal1);
-    victor2.set(joyVal1);
+    // victor1.set(joyVal1);
+    // victor2.set(joyVal1);
     victor3.set(joyVal1);
 
-    if(joystick.getRawButton(3)) {
+    if(joystick.getRawButton(5)) {
+      victor3.set(1);
+    } else if(joystick.getRawButton(6)) {
+      victor3.set(-1);
+    } else if(joystick.getRawButton(1)) {
+      victor3.set(0);
+    }
+
+    if(joystick.getRawButton(11)) {
+      compressor.start();
+      System.out.println("Compressor start");
+    } else if(joystick.getRawButton(12)) {
+      compressor.stop();
+      System.out.println("Compressor off");
+    }
+
+
+    if(joystick.getRawButton(9)) {
       suction.set(DoubleSolenoid.Value.kForward);
       System.out.println("Pneumatics forward");
 
-    } else if(joystick.getRawButton(1)) {
+    } else if(joystick.getRawButton(10)) {
       suction.set(DoubleSolenoid.Value.kReverse);
       System.out.println("Pneumatics reverse");
-
-    } else if(joystick.getRawButton(2)) {
+      
+    } else if(joystick.getRawButton(8)) {
       suction.set(DoubleSolenoid.Value.kOff);
       System.out.println("Pneumatics off");
     }
